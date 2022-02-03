@@ -41,7 +41,7 @@ class PopularMovieViewHolder(private val view: View,private val context: Context
 }
 
 class NetworkStateViewHolder(private val view: View): RecyclerView.ViewHolder(view) {
-    fun bind(networkState: NetworkState) {
+    fun bind(networkState: NetworkState?) {
         if(networkState === NetworkState.LOADING) {
             view.findViewById<TextView>(R.id.error_msg_item).visibility = View.GONE
             view.findViewById<ProgressBar>(R.id.progressbar_item).visibility = View.VISIBLE
@@ -63,7 +63,7 @@ class NetworkStateViewHolder(private val view: View): RecyclerView.ViewHolder(vi
 class PopularMovieAdapter(private val context: Context): PagedListAdapter<PopularMovie, RecyclerView.ViewHolder>(
     DIFF_CONFIG
 ) {
-    private lateinit var networkState: NetworkState
+    private var networkState: NetworkState? = null
 
     val MOVIE_VIEW_TYPE = 1
     val NETWORK_VIEW_TYPE = 2
@@ -94,13 +94,20 @@ class PopularMovieAdapter(private val context: Context): PagedListAdapter<Popula
 
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return if(hasExtraRow() && position == itemCount - 1) {
+            NETWORK_VIEW_TYPE
+        } else {
+            MOVIE_VIEW_TYPE
+        }
+    }
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(getItemViewType(position) === MOVIE_VIEW_TYPE) {
             (holder as PopularMovieViewHolder).bind(getItem(position))
         } else {
             (holder as NetworkStateViewHolder).bind(networkState)
         }
-
     }
 
     private fun hasExtraRow(): Boolean {
@@ -109,5 +116,22 @@ class PopularMovieAdapter(private val context: Context): PagedListAdapter<Popula
 
     override fun getItemCount(): Int {
         return super.getItemCount() + if(hasExtraRow()) 1 else 0
+    }
+
+    fun setNetworkState(newNetworkState: NetworkState) {
+        val previousState = this.networkState
+        val hadExtraRow = hasExtraRow()
+        this.networkState = newNetworkState
+        val hasExtraRow = hasExtraRow()
+
+        if(hadExtraRow != hasExtraRow) {
+            if(hadExtraRow) { //hadExtraRow is true and hasExtraRow false
+                notifyItemRemoved(super.getItemCount()) //remove the progressbar at the end
+            } else { // hasExtraRow is true and hadExtraRow false
+                notifyItemInserted(super.getItemCount()) // add the progressbar at the end
+            }
+        } else if(hasExtraRow && previousState != newNetworkState) { //hasExtraRow is true and hadExtraRow true
+            notifyItemChanged(itemCount - 1)
+        }
     }
 }
