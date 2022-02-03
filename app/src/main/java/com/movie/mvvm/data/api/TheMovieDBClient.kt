@@ -13,6 +13,9 @@ import java.util.concurrent.TimeUnit
 const val BASE_URL = "https://api.themoviedb.org/3/"
 const val POSTER_BASE_URL = "https://image.tmdb.org/t/p/w342"
 
+// https://api.themoviedb.org/3/movie/popular?api_key=API_KEY&page=1
+// https://api.themoviedb.oorg/3/movie/299534?api_key=API_KEY
+// https://image.tmdb.org/t/p/w342/or06FN3Dka5tukK1e9sl16pB3iy.jpg
 object TheMovieDBClient {
     fun getClient(): TheMovieDBInterface {
 

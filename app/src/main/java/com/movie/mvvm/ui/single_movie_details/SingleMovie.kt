@@ -1,5 +1,6 @@
-package com.movie.mvvm.single_movie_details
+package com.movie.mvvm.ui.single_movie_details
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -23,7 +24,8 @@ class SingleMovie : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val movieId = 299534
+        println(intent.getIntExtra("movie_id",1))
+        val movieId = intent.getIntExtra("movie_id",1)
         binding = ActivitySingleMovieBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

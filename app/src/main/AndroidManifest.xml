@@ -13,19 +13,18 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.MovieMVVM">
         <activity
-            android:name=".single_movie_details.SingleMovie"
+            android:name="com.movie.mvvm.ui.single_movie_details.SingleMovie"
             android:exported="true"
             android:label="@string/title_activity_single_movie"
             android:theme="@style/Theme.MovieMVVM.NoActionBar" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.popular_movie.MainActivity"
             android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 
